@@ -12,7 +12,7 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - "**"
+      - '**'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -110,29 +110,30 @@ jobs:
 
 ---
 
-## 2. CI 執行結果 
+## 2. CI 執行結果
 
 > [image action首頁]
 
 ### A. 成功案例展示
 
-> [!NOTE] 
+> [!NOTE]
 > [image 成功1]
+>
 > 1. GitHub Actions 工作流程全數通過的畫面。
-> [image 成功2]
+>    [image 成功2]
 > 2. GitHub 頁面上渲染出的 "Test Results" 詳細測試報告截圖。
 
 ---
 
 ### B. 失敗案例說明
 
-> [!NOTE] 
+> [!NOTE]
 > [image 失敗1]
 > [image 失敗2]
 
 **錯誤情境製造與說明：**
 
-*   **情境**：故意造成 Prettier 格式錯誤。
-*   **觸發原因**：在 ci_314551133.yaml 中，使用""(雙引號)，而非''(單引號)。在開發者將程式碼強制推送到 GitHub 時，觸發了 `npm run format:check`。
-*   **觀察到的結果**：由於 `npm run format:check` 反應到代碼格式不符，行程回傳了非零的結束代碼 (`exit code 1`)，使得 GitHub Actions 終止該 Pipeline 步驟並在面板上顯示 `format-check` 該項失敗。
-*   **修正方式**：在本地開發環境執行 `npm run format`（底層執行 `prettier --write .`），讓工具自動且強制修正在本地的所有format，確認無誤後再次進行 commit 與 push 解決此問題。
+- **情境**：故意造成 Prettier 格式錯誤。
+- **觸發原因**：在 ci_314551133.yaml 中，使用""(雙引號)，而非''(單引號)。在開發者將程式碼強制推送到 GitHub 時，觸發了 `npm run format:check`。
+- **觀察到的結果**：由於 `npm run format:check` 反應到代碼格式不符，行程回傳了非零的結束代碼 (`exit code 1`)，使得 GitHub Actions 終止該 Pipeline 步驟並在面板上顯示 `format-check` 該項失敗。
+- **修正方式**：在本地開發環境執行 `npm run format`（底層執行 `prettier --write .`），讓工具自動且強制修正在本地的所有format，確認無誤後再次進行 commit 與 push 解決此問題。
