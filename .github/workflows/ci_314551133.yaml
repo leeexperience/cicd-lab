@@ -55,7 +55,47 @@ jobs:
       - name: Run Prettier format check
         run: npm run format:check
 
-  # 工作 3: 單元測試
+  # 工作 3: ESLint 語法檢查
+  lint:
+    runs-on: ubuntu-latest
+    name: ESLint Check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # 工作 4: 建置測試
+  build:
+    runs-on: ubuntu-latest
+    name: Build Test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Build
+        run: npm run build
+
+  # 工作 5: 單元測試
   test:
     runs-on: ubuntu-latest
     name: Unit Tests

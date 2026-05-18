@@ -46,7 +46,29 @@ jobs:
       - run: npm ci
       - run: npm run format:check
 
-  # 3. Unit tests
+  # 3. ESLint 語法檢查
+  lint:
+    runs-on: ubuntu-latest
+    name: ESLint Check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - run: npm run lint
+
+  # 4. 建置測試
+  build:
+    runs-on: ubuntu-latest
+    name: Build Test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - run: npm run build
+
+  # 5. Unit tests
   test:
     runs-on: ubuntu-latest
     name: Unit Tests
@@ -76,9 +98,11 @@ jobs:
    - 使用 `actions/setup-node@v4` 確保 Node.js 環境版本一致性（設定為 `22`）並引入 `npm ci` 快取策略。
    - 調整 Action 權限 (`permissions`)，以便開放 Github Checks API 允許回傳並渲染測試報告。
 
-2. **Job 並行化策略**：
-   - 將 Pipeline 拆分為 `typecheck` (TypeScript), `format-check` (Prettier), `test` (Vitest) 三個獨立的 Job。
+2. **Job 並行化策略與進階檢查項**：
+   - 將 Pipeline 拆分為 `typecheck` (TypeScript), `format-check` (Prettier), `lint` (ESLint 語法檢查), `build` (建置測試), `test` (Vitest) 五個獨立的 Job。
    - 三個任務同時進行能顯著降低整體驗證所需時間。當多個錯誤同時發生時，開發者也能在同一輪 CI 執行中一次掌握所有錯誤資訊。
+   - **加入 Linter 檢查**：藉由 `npm run lint` 提前攔截宣告未使用變數、潛在 bug 等排版工具無法捕捉的邏輯寫法問題。
+   - **加入 Build 檢查**：利用 `npm run build` 確認應用程式最終能成功編譯成 JS，避免合併後在部署前才發現無法建構。
 
 3. **測試報告視覺化（Test Reporter）**：
    - 於專案內調整 `vitest.config.ts` 的 `reporters` 屬性，在測試完畢後除了標準終端機輸出外，額外生成 `test-results.xml` (JUnit 格式)。
@@ -86,20 +110,25 @@ jobs:
 
 ---
 
-## 2. CI 執行結果截圖 (成功案例)
+## 2. CI 執行結果 
+
+> [image action首頁]
+
+### A. 成功案例展示
 
 > [!NOTE] 
-> 📝 **[請在此處插入截圖]** 
+> [image 成功1]
 > 1. GitHub Actions 工作流程全數通過的畫面。
+> [image 成功2]
 > 2. GitHub 頁面上渲染出的 "Test Results" 詳細測試報告截圖。
 
 ---
 
-## 3. 失敗案例說明
+### B. 失敗案例說明
 
 > [!NOTE] 
-> 📝 **[請在此處插入截圖]** 
-> *請提供包含「紅色叉叉」指出某個 Job 失敗的 GitHub Actions 頁面截圖，並呈現錯誤日誌畫面。*
+> [image 失敗1]
+> [image 失敗2]
 
 **錯誤情境製造與說明：**
 
