@@ -5,6 +5,15 @@ on:
     branches:
       - "**"
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   # 工作 1: TypeScript 類型檢查
   typecheck:
